@@ -1,0 +1,62 @@
+css{
+    box-sizing: border-box;
+    
+}
+
+body {
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+    color: #f9fafb;
+
+}
+
+header{
+    background-color: #1f2937;
+    color: black;
+    padding: 1rem;
+    text-align: center;
+}
+header a{
+    color: #fffff1;
+}
+
+main{
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+footer{
+    text-align: center;
+    padding: 1rem;
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+.catalogo{
+    display:grid;
+    grid-template-columns: repeat(3,1fr);
+}
+
+.tarjeta{
+    background-color: #fffff1;
+    border: 1px solid #fffff1;
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+.tarjeta h2{
+    margin-top: 0;
+    font-size: 1.1rem;
+
+}
+
+.tarjeta a{
+    color: rgb(119, 170, 153);
+    text-decoration: none;
+}
+
+.tarjeta a:hover{
+    color: #6b7280;
+    text-decoration: overline;
+}
