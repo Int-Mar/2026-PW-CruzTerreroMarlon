@@ -14,17 +14,19 @@ const patrones = {
 };
 
 const mensajes = {
-    nombre : "Solo letras y espacios, entre 2 y 60 caracteres.",
+    nombre : "Solo letras y espacios, entre 3 y 60 caracteres.",
     boleta : "Debe tener exactamente 10 dígitos numéricos.",
-    fecha : "La fecha debe tener el formato DD/MM/AAAA."
+    fecha : "La fecha debe tener el formato DD/MM/AAAA y ser una fecha válida."
 };
 
 function validarCampo(campo, valor){
     return patrones[campo].test(valor.trim());
 }
 
+
 if (typeof document !== 'undefined') {
-    const formulario = document.getElementById('form-registro');
+    
+    const formulario = document.getElementById('formRegistro');
 
     if (formulario) {
         formulario.addEventListener('submit', (evento) => {
@@ -39,10 +41,17 @@ if (typeof document !== 'undefined') {
                 if (!input) continue;
 
                 const esValido = validarCampo(campo, input.value);
-                input.classList.toggle('invalido', !esValido);
                 
                 if (errorSpan) {
-                    errorSpan.textContent = esValido ? '' : mensajes[campo];
+                    if (esValido) {
+                        errorSpan.textContent = '';
+                        
+                        errorSpan.style.display = 'none'; 
+                    } else {
+                        errorSpan.textContent = mensajes[campo];
+                        
+                        errorSpan.style.display = 'block'; 
+                    }
                 }
 
                 if (!esValido) {
@@ -50,9 +59,18 @@ if (typeof document !== 'undefined') {
                 }
             }
 
-            const mensajeExito = document.getElementById('mensaje-exito');
+            
+            const mensajeExito = document.getElementById('mensajeExito');
+            
             if (mensajeExito) {
-                mensajeExito.textContent = formularioValido ? '¡Registro exitoso!' : '';
+                if (formularioValido) {
+                    mensajeExito.textContent = '¡Registro exitoso!';
+                    
+                    mensajeExito.classList.add('mostrar');
+                } else {
+                    
+                    mensajeExito.classList.remove('mostrar');
+                }
             }
         });
     }
