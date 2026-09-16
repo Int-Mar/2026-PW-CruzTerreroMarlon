@@ -11,7 +11,6 @@ const patrones = {
     nombre : /^[A-Za-zÁÉÍÓÚÑáéíóúñÜü\s]{2,60}$/,
     boleta : /^\d{10}$/,
     fecha : /^(0[1-9]|[12]\d|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/
-
 };
 
 const mensajes = {
@@ -21,32 +20,40 @@ const mensajes = {
 };
 
 function validarCampo(campo, valor){
-    return patrones[campo].test(valor.trim())
+    return patrones[campo].test(valor.trim());
 }
-
-//para validar el formulario debemos ocupar los principios de obtención y manipulación de los elementos del DOM 
 
 if (typeof document !== 'undefined') {
     const formulario = document.getElementById('form-registro');
 
-    formulario.addEventListener('submit', (evento) => {
-        evento.preventDefault(); // Evita que el formulario se envíe automáticamente
+    if (formulario) {
+        formulario.addEventListener('submit', (evento) => {
+            evento.preventDefault();
 
-        let formularioValido = true;
+            let formularioValido = true;
 
-        for(const campo of Object.keys(patrones)){
-            const input = document.getElementById(campo);
-            const errorSpan = document.getElementById(`error-${campo}`);
-            const esValido = validarCampo(campo, input.value);
-            input.classList.toggle('invalido', !esValido);
-            spanError.textContent = esValido ? '' : mensajes[campo];
-            if(!esValido) formularioValido = false;
-        }
+            for (const campo of Object.keys(patrones)) {
+                const input = document.getElementById(campo);
+                const errorSpan = document.getElementById(`error-${campo}`);
 
-        const mensajeExito = document.getElementById('mensaje-exito');
-        mensajeExito.textContent = formularioValido ? 'Registro exitoso!' : '';
-        
+                if (!input) continue;
 
+                const esValido = validarCampo(campo, input.value);
+                input.classList.toggle('invalido', !esValido);
+                
+                if (errorSpan) {
+                    errorSpan.textContent = esValido ? '' : mensajes[campo];
+                }
 
-    });
+                if (!esValido) {
+                    formularioValido = false;
+                }
+            }
+
+            const mensajeExito = document.getElementById('mensaje-exito');
+            if (mensajeExito) {
+                mensajeExito.textContent = formularioValido ? '¡Registro exitoso!' : '';
+            }
+        });
+    }
 }

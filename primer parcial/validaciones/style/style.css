@@ -1,13 +1,14 @@
 *{
     box-sizing: border-box;
 }
+
 body {
     margin: 0;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: Verdana, Courier, monospace;
     color: #1f2937;
     background-color: #f9fafb;
- 
 }
+
 header {
     background-color: #1f2937;
     color: #ffff;
@@ -16,8 +17,12 @@ header {
 }
  
 header a {
+    text-decoration: none;
     color: #FFFF;
- 
+}
+
+header a:hover {
+    color: #ff0090;
 }
  
 main {
@@ -32,7 +37,13 @@ footer {
     color: #6b7286;
     font-size: 0.875rem;
 }
- 
+
+
+
+/*Talleres*/
+
+
+
 .catalogo {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -44,7 +55,6 @@ footer {
     border: 1px solid;
     border-radius: 0.5rem;
     padding: 1rem;
- 
 }
  
 .tarjeta h2{
@@ -55,4 +65,159 @@ footer {
  
 .tarjeta a:hover {
     text-decoration: underline;
+}
+
+.tarjeta a{
+    text-decoration: none;
+    color: #ff0084;
+}
+
+/*Detalle*/
+
+.info-taller {
+    background-color: #ffff;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.bitacora {
+    background-color: #ffff;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    max-width: 600px;
+    margin: 1rem auto;
+    text-align: center;
+}
+
+li {
+    list-style-type: none;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #d1d5db;
+}
+
+.info-taller a {
+    text-decoration: none;
+    color: #ff0479;
+}
+
+.info-taller a:hover {
+    color: #6f00ff;
+}
+
+
+/*Ragistro*/
+
+.formulario-registro {
+    max-width: 420px;
+    margin: 0 auto;
+    background-color: #ffff;
+    border: 1px solid #d1d5db;
+    border-radius: 0.7rem;
+    padding: 1.5rem 2rem;
+    gap: 0.25rem;
+}
+
+.formulario-registro h1 {
+    margin-top: 0;
+    font-size: 1.5rem;
+    color: #1f2937;
+    text-align: center;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.campo label {
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+    color: #1f2937;
+}
+
+#nombre {
+    padding: 0.6rem 0.7rem;
+    border: 1px solid #9ca3af;
+    border-radius: 0.4rem;
+    font-size: 1rem;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#boleta {
+    padding: 0.6rem 0.7rem;
+    border: 1px solid #9ca3af;
+    border-radius: 0.4rem;
+    font-size: 1rem;
+    font-family: Verdana, Courier, monospace;
+    letter-spacing: 1px;
+}
+
+#fecha {
+    padding: 0.6rem 0.7rem;
+    border: 1px solid #9ca3af;
+    border-radius: 0.4rem;
+    font-size: 1rem;
+    font-family: Verdana, Courier, monospace;
+    letter-spacing: 1px;
+}
+
+.formulario-registro button {
+    background-color: #ff0084;
+    color: #ffff;
+    border: none;
+    border-radius: 0.4rem;
+    padding: 0.7rem 1rem;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.formulario-registro button:hover {
+    background-color: #330671;
+}
+
+.formulario-registro button:active {
+    transform: translateY(0);
+}
+
+.campo input.tocado:invalid {
+    border-color: #dc2626;
+    background-color: #ffff;
+}
+
+.mensaje-error {
+    display: none;
+    color: #dc2626;
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+}
+
+.campo input.abierto:invalid ~ .mensaje-error {
+    display: block;
+}
+
+.mensaje-exito {
+    display: none;
+    background-color: #dcfce7;
+    color: #166534;
+    border: 1px solid #22c55e;
+    border-radius: 0.4rem;
+    padding: 0.7rem 1rem;
+    margin-top: 1rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.mensaje-exito.mostrar {
+    display: block;
+}
+
+.formulario-registro.registro-exitoso {
+    border-color: #22c55e;
 }
