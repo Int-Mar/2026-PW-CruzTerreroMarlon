@@ -2,12 +2,17 @@
 // Métodos de arreglo más usados en JS/Node — practícalos sobre esta lista
 // de talleres (misma forma que la API real de CECyT9). Completa cada TODO.
 
+/*
 const talleres = [
   { nombre: 'Introducción a Python', instructor: 'Ing. María López', cupo: 25, inscritos: 25 },
   { nombre: 'Fundamentos de Redes', instructor: 'Ing. Carlos Ramírez', cupo: 30, inscritos: 18 },
   { nombre: 'Diseño de Bases de Datos', instructor: 'Ing. Ana Torres', cupo: 20, inscritos: 20 },
   { nombre: 'Desarrollo Web con JS', instructor: 'Ing. María López', cupo: 25, inscritos: 10 },
 ];
+*/
+
+
+
 
 // TODO: forEach — imprime "- <nombre> (<inscritos>/<cupo>)" de cada taller
 
@@ -29,12 +34,17 @@ console.log(llenos.map((t)=> t.nombre))
 
 // TODO: find — encuentra el PRIMER taller impartido por 'Ing. María López'
 
-
+const tallerMaria = talleres.find((t) => t.instructor === 'María');
+console.log('Taller encontrado con find:', tallerMaria);
 
 // TODO: reduce — calcula `totalInscritos`, la suma de inscritos de todos los talleres
 
-
+const totalInscritos = talleres.reduce((acum, t) => acum + t.inscritos, 0);
+console.log('Total de alumnos inscritos (reduce):', totalInscritos);
 
 // TODO: filter + map encadenados — nombres de los talleres que SÍ tienen cupo disponible
 
-
+const disponibles = talleres
+  .filter((t) => t.inscritos < t.cupo)
+  .map((t) => t.nombre);
+console.log('Talleres con disponibilidad:', disponibles);

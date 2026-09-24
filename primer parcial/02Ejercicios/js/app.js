@@ -5,7 +5,7 @@ const talleres = [
   { nombre: 'Desarrollo Web con JS', instructor: 'Ing. María López', cupo: 25, inscritos: 10 },
 ];
 
-// Función para rellenar la tabla
+// funcion para rellenar la tabla
 function pintarTabla() {
   const tbody = document.querySelector('#tabla-talleres tbody');
   
@@ -29,6 +29,9 @@ function pintarTabla() {
 pintarTabla();
 
 
+
+
+
 // manejar el formulario de arreglos
 const formArreglos = document.getElementById('form-arreglos');
 const resultadoArreglos = document.getElementById('resultado-arreglo');
@@ -41,6 +44,7 @@ formArreglos.addEventListener('submit', (evento) => {
   let resultado;
 
   switch (operacion) {
+    
     // forEach: imprime la lista formateada
     case 'forEach':
       resultado = talleres
