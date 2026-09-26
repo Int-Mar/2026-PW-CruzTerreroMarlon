@@ -97,15 +97,15 @@ formArreglos.addEventListener('submit', (evento) => {
 
 //segunda parte
 
-const formObjetos = document.getElementById('form-objetos');
-const resultadoObjetos = document.getElementById('resultado-objetos');
+const formObjetos = document.getElementById('form-objeto');
+const resultadoObjetos = document.getElementById('resultado-objeto');
 
 formObjetos.addEventListener('submit', (evento) => {
   evento.preventDefault();
 
   const taller = {
     nombre: document.getElementById('obj-nombre').value,
-    instructor: document.getElementById(`obj-instructor`).value,
+    instructor: document.getElementById('obj-instructor').value,
     cupo: Number(document.getElementById('obj-cupo').value),
     inscritos: Number(document.getElementById('obj-inscritos').value),
   };
@@ -120,14 +120,15 @@ formObjetos.addEventListener('submit', (evento) => {
       break;
 
     case 'values':
-      resultado = JSON.stringify(Object.values(taller));
+      resultado = Object.values(taller).join(', ');
       break;
 
     case 'entries':
-      resultado = object.entries(Object.entries(taller).map(([campo, valor]) => `${campo}: ${valor}`).join('\n'));
+      resultado = Object.entries(taller).map(([campo, valor]) => `${campo}: ${valor}`).join('\n');
       break;
 
     case 'stringify':
+      resultado = JSON.stringify(taller, null, 2);
       break;
 
     case 'roundtrip':
@@ -143,8 +144,11 @@ formObjetos.addEventListener('submit', (evento) => {
       ].join('\n');
 
       break;
+
+      default:
+      resultado = 'Operación no reconocida';
+      break;
   }
 
   resultadoObjetos.textContent = resultado;
-
-})
+});

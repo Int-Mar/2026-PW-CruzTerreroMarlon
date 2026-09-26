@@ -329,3 +329,12 @@ a:hover {
     font-size: 1rem;
     font-family: Verdana, Tahoma, sans-serif;
 }
+
+/*Video*/
+
+video {
+  border: 3px solid #333;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  margin-top: 20px;
+}   
