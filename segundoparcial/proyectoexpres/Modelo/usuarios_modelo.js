@@ -1,62 +1,52 @@
 const pool = require('../bd-local');
 
-const COLUMNAS_PUBLICAS = ['id', 'nombre', 'apellido', 'correo', 'contrasena', 'rol'];
+// Nunca se regresa contrasena_hash
+const COLUMNAS_PUBLICAS = 'id, correo, nombre, boleta, rol';
 
-//consultar todos 
+// Consultar a todos
 async function listar() {
-    const[filas] = await pool.query(`SELECT ${COLUMNAS_PUBLICAS} FROM usuario ORDER BY id`);
+    const [filas] = await pool.query(`SELECT ${COLUMNAS_PUBLICAS} FROM usuarios ORDER BY id`);
     return filas;
 }
 
-//obener por id
-async function obtenerPorId() {
-    const[filas] = await pool.query(`SELECT ${COLUMNAS_PUBLICAS} FROM usuario WHERE BY id = ?`);
+// Obtener por id
+async function obtenerPorId(id) {
+    const [filas] = await pool.query(`SELECT ${COLUMNAS_PUBLICAS} FROM usuarios WHERE id = ?`, [id]);
     return filas[0];
 }
 
-//registrar
-async function crear({nombre, correo, contrasenahash, boleta, rol}) {
+// Registrar
+async function crear({ nombre, correo, contrasenaHash, boleta, rol }) {
     const [info] = await pool.query(
-        `INSERT INTO usuarios (nombre, correo, contrasena_hash, boleta, rol) VALUES (?, ?, ?, ?, ?)`, [nombre, correo, contrasenahash, boleta, rol `alumno`]
+        `INSERT INTO usuarios (nombre, correo, contrasena_hash, boleta, rol) VALUES (?, ?, ?, ?, ?)`,
+        [nombre, correo, contrasenaHash, boleta, rol || 'alumno']
     );
     return obtenerPorId(info.insertId);
-
 }
 
-async function actualizar(id, {nombre, correo, rol}) {
-    const cambios = Object.entries({nombre, correo, rol}).filter
-    (([, valor]) = valor !== undefined);
-    if(cambios.length === 0) return obtenerPorId(id);
+// Actualizar solo los campos que llegan
+async function actualizar(id, { nombre, correo, rol }) {
+    const cambios = Object.entries({ nombre, correo, rol }).filter(([, valor]) => valor !== undefined);
+    if (cambios.length === 0) return obtenerPorId(id);
 
     const columnas = cambios.map(([columna]) => `${columna} = ?`).join(', ');
+    const valores = cambios.map(([, valor]) => valor);
 
-    const [info] = await pool.query(`UPDATE usuario SET ${columnas} WHERE id = ?`, [...cambios.map(([ , valor]) = valor), id]);
-    if(info.affectedRows == 0) return undefined;
+    const [info] = await pool.query(`UPDATE usuarios SET ${columnas} WHERE id = ?`, [...valores, id]);
+    if (info.affectedRows === 0) return undefined;
     return obtenerPorId(id);
-
-
 }
 
-//eliminar
+// Eliminar
 async function eliminar(id) {
-    const [filas] = await pool.query(`DELETE FROM usuario WHERE id = ?` [id]);
-    return info.affectedRowsa  = 0;
+    const [info] = await pool.query(`DELETE FROM usuarios WHERE id = ?`, [id]);
+    return info.affectedRows > 0;
 }
 
-//buscar correo hash
+// Buscar por correo (trae el hash, sirve para el login)
 async function buscarPorCorreoConHash(correo) {
-    const [filas] = await pool.query(`SELECT * FROM usuarios WHERE BY correo = ?`, [correo]);
+    const [filas] = await pool.query(`SELECT * FROM usuarios WHERE correo = ?`, [correo]);
     return filas[0];
 }
 
-module.sports = {listar, obtener, crear, actualizar, eliminar, buscarPorCorreoConHash}
-
-
-
-//deberan crear los modelos de la tabla talleres y asistencia
-//taller tiene registraralumno al taller, constultar todos los talleres
-//asistencia tiene registrarasistencia consultar asistencia de taller
-//talleres_modelo.js
-//asistencia_modelo.js
-
-//ambas con dos funcionalidades
+module.exports = { listar, obtenerPorId, crear, actualizar, eliminar, buscarPorCorreoConHash };
