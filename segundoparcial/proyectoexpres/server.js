@@ -4,7 +4,7 @@ const app = express();
 
 app.use(express.json());
 
-const PORT = 4000;
+const PORT = 3000;
 
 // ejemplo de una peticion por medio de una ruta principal GET
 
