@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 
 const talleresRutas = require('./Rutas/talleres_rutas');
@@ -6,9 +7,9 @@ const usuarioRutas = require('./Rutas/usuario_rutas');
 
 const app = express();
 
-app.use(express.json());
+app.use(express.json({ limit: '10kb' }));
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 
 // Prueba de vida
 app.get('/', (req, res) => {

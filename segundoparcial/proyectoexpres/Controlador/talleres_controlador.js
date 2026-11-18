@@ -1,5 +1,7 @@
 const talleresModel = require('../Modelo/talleres_modelo');
 
+const { validarTitulo, validarFecha, validarCupo, validarNombre, limpiar } = require('../validaciones');
+
 function esDuplicado(error) {
     return error.code === 'ER_DUP_ENTRY' || error.code === '23505';
 }
@@ -33,15 +35,25 @@ async function crearTaller(req, res) {
     if (!nombre || !fecha) {
         return res.status(400).json({ error: 'nombre y fecha son obligatorios' });
     }
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
-        return res.status(400).json({ error: 'La fecha debe tener el formato AAAA-MM-DD' });
+    if (!validarTitulo(nombre)) return res.status(400).json({ error: 'El nombre del taller debe tener de 3 a 100 caracteres' });
+    if (!validarFecha(fecha)) return res.status(400).json({ error: 'La fecha debe existir y tener el formato AAAA-MM-DD' });
+    if (instructor !== undefined && !validarNombre(instructor)) {
+        return res.status(400).json({ error: 'El instructor debe tener de 2 a 60 letras, sin números' });
+    }
+    if (cupo !== undefined && !validarCupo(cupo)) {
+        return res.status(400).json({ error: 'El cupo debe ser un número entero entre 1 y 500' });
     }
 
     try {
-        const taller = await talleresModel.crear({ nombre, instructor, fecha, cupo });
+        const taller = await talleresModel.crear({
+            nombre: limpiar(nombre),
+            instructor: instructor !== undefined ? limpiar(instructor) : undefined,
+            fecha,
+            cupo,
+        });
         res.status(201).json(taller);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 }
 

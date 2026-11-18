@@ -27,7 +27,17 @@ async function consultarAsistenciaPorTaller(taller_id) {
     return filas;
 }
 
+// 3. Revisar si una boleta ya está inscrita en un taller
+async function existeBoletaEnTaller(taller_id, boleta) {
+    const [filas] = await pool.query(
+        'SELECT 1 FROM asistencias WHERE taller_id = ? AND boleta = ? LIMIT 1',
+        [taller_id, boleta]
+    );
+    return filas.length > 0;
+}
+
 module.exports = {
     registrarAsistencia,
-    consultarAsistenciaPorTaller
+    consultarAsistenciaPorTaller,
+    existeBoletaEnTaller
 };
