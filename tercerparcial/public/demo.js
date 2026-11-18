@@ -35,3 +35,50 @@ async function llamar(metodo, url, cuerpo) {
     return { status: 0, datos: { error: 'No se pudo conectar con el servidor' } };
   }
 }
+
+
+
+
+
+
+
+// ETAPA 2 La bitácora
+
+// Por qué una función aparte: elegir el color según el código es una decisión que
+// solo depende del número, así la bitácora no se llena de ifs.
+function claseCodigo(status) {
+  if (status >= 200 && status < 300) return 'ok';
+  if (status === 401) return 'e401';
+  if (status === 403) return 'e403';
+  return 'error';
+}
+
+// Por qué textContent y no innerHTML: el JSON puede traer texto que escribió alguien
+// (un nombre, por ejemplo). Con innerHTML ese texto se interpretaría como HTML y permitiría
+// XSS: un <script> o un <img onerror=…> corriendo en nuestra página. Si la cookie no fuera
+// httpOnly, ese código podría leer document.cookie y mandarla al atacante (secuestro de sesión).
+// textContent siempre lo trata como texto plano.
+function anotar(metodo, url, status, datos) {
+  const li = document.createElement('li');
+
+  const codigo = document.createElement('span');
+  codigo.className = `codigo ${claseCodigo(status)}`;
+  codigo.textContent = status;
+
+  const ruta = document.createElement('strong');
+  ruta.textContent = ` ${metodo} ${url}`;
+
+  const pre = document.createElement('pre');
+  pre.textContent = JSON.stringify(datos, null, 2);
+
+  li.append(codigo, ruta, pre);
+
+  // prepend: el más nuevo queda arriba.
+  $('bitacora').prepend(li);
+}
+
+
+
+
+
+
