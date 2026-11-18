@@ -103,3 +103,60 @@ async function cargarEstado() {
   // del JavaScript (por eso un XSS no puede robarla), pero igual la manda en cada petición.
   $('cookie-js').textContent = document.cookie || '(vacío)';
 }
+
+
+
+
+// ETAPA 4 La tabla de lo que guarda el servidor
+
+function agregarFila(tbody, celdas, clase) {
+  const tr = document.createElement('tr');
+  if (clase) tr.className = clase;
+  for (const texto of celdas) {
+    const td = document.createElement('td');
+    td.textContent = texto; // textContent: el nombre de usuario viene del servidor
+    tr.append(td);
+  }
+  tbody.append(tr);
+}
+
+async function cargarTabla() {
+  const { status, datos } = await llamar('GET', '/api/diagnostico/sesiones');
+  const tbody = $('tabla-sesiones');
+
+  // Por qué vaciar primero: si no, cada clic agregaría las filas otra vez (se duplicarían).
+  tbody.replaceChildren();
+
+  if (status !== 200 || !datos) {
+    $('donde').textContent = 'No se pudo leer el almacén de sesiones';
+    agregarFila(tbody, ['(sin sesiones)', '', '', '']);
+    return;
+  }
+
+  $('donde').textContent =
+    datos.almacen === 'mysql'
+      ? 'En MySQL, tabla sessions: sobreviven si el servidor se reinicia'
+      : 'En la memoria del servidor: se pierden si el servidor se reinicia';
+
+  if (datos.sesiones.length === 0) {
+    agregarFila(tbody, ['(sin sesiones)', '', '', '']);
+    return;
+  }
+
+  for (const s of datos.sesiones) {
+    // expira llega como texto ISO ("2026-11-11T23:16:47.313Z"); new Date lo entiende
+    // y toLocaleTimeString lo muestra en la hora de tu computadora.
+    const vence = s.expira ? new Date(s.expira).toLocaleTimeString('es-MX') : '—';
+    agregarFila(
+      tbody,
+      [s.esLaTuya ? `${s.sesion} (la tuya)` : s.sesion, s.usuario, s.visitas, vence],
+      s.esLaTuya ? 'tuya' : ''
+    );
+  }
+}
+
+// Por qué una función que hace las dos: después de cualquier acción (login, logout, botón)
+// tanto el estado como la tabla pueden haber cambiado.
+async function refrescarTodo() {
+  await Promise.all([cargarEstado(), cargarTabla()]);
+}
