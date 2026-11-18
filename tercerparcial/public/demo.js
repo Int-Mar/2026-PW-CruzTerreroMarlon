@@ -198,3 +198,18 @@ document.querySelectorAll('[data-url]').forEach((boton) => {
 
 $('btn-refrescar').addEventListener('click', refrescarTodo);
 $('btn-sesiones').addEventListener('click', cargarTabla);
+
+
+
+
+// ETAPA 6 Al cargar la página
+
+// No hace falta esperar a DOMContentLoaded: en index.html el <script> está al final del
+// <body>, así que cuando este archivo corre, todos los elementos ya existen.
+async function iniciar() {
+  const { datos } = await llamar('GET', '/api/config');
+  $('config').textContent = datos ? JSON.stringify(datos, null, 2) : '(no se pudo leer la configuración)';
+  await refrescarTodo();
+}
+
+iniciar();
