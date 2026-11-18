@@ -82,3 +82,24 @@ function anotar(metodo, url, status, datos) {
 
 
 
+// ETAPA 3 El estado ("¿quién soy para el servidor?")
+
+// Por qué preguntamos al servidor y no a la cookie: la cookie solo trae un id firmado;
+// quién eres y cuánto te queda lo sabe únicamente el servidor.
+async function cargarEstado() {
+  const { status, datos } = await llamar('GET', '/api/sesion');
+  const estado = $('estado');
+
+  if (status === 200 && datos) {
+    estado.className = 'estado con-sesion';
+    estado.textContent =
+      `${datos.usuario.nombre} (${datos.usuario.rol}) · sesión ${datos.sesion} · vence en ${datos.expiraEnSegundos} s`;
+  } else {
+    estado.className = 'estado sin-sesion';
+    estado.textContent = `Sin sesión (el servidor responde ${status === 0 ? 'nada' : status})`;
+  }
+
+  // Con httpOnly: true esto sale vacío aunque estés logueado: el navegador esconde la cookie
+  // del JavaScript (por eso un XSS no puede robarla), pero igual la manda en cada petición.
+  $('cookie-js').textContent = document.cookie || '(vacío)';
+}
