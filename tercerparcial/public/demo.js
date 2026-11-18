@@ -160,3 +160,41 @@ async function cargarTabla() {
 async function refrescarTodo() {
   await Promise.all([cargarEstado(), cargarTabla()]);
 }
+
+
+
+
+
+
+
+// ETAPA 5 Los eventos
+
+// Formulario de login: preventDefault evita que el navegador recargue la página
+// (el comportamiento normal de un submit), para poder usar fetch y quedarnos aquí.
+$('form-login').addEventListener('submit', async (evento) => {
+  evento.preventDefault();
+  const cuerpo = { usuario: $('usuario').value, contrasena: $('contrasena').value };
+  const { status, datos } = await llamar('POST', '/api/login', cuerpo);
+  anotar('POST', '/api/login', status, datos);
+  await refrescarTodo();
+});
+
+// Al cambiar de usuario, ponemos su contraseña de ejemplo (<usuario>12345).
+// El evento es "change": se dispara cuando eliges otra opción del <select>.
+$('usuario').addEventListener('change', () => {
+  $('contrasena').value = `${$('usuario').value}12345`;
+});
+
+// En vez de un addEventListener por botón, recorremos todos los que tienen data-url.
+// dataset lee los atributos data-*: data-metodo → dataset.metodo, data-url → dataset.url.
+document.querySelectorAll('[data-url]').forEach((boton) => {
+  boton.addEventListener('click', async () => {
+    const { metodo, url } = boton.dataset;
+    const { status, datos } = await llamar(metodo, url);
+    anotar(metodo, url, status, datos);
+    await refrescarTodo();
+  });
+});
+
+$('btn-refrescar').addEventListener('click', refrescarTodo);
+$('btn-sesiones').addEventListener('click', cargarTabla);
