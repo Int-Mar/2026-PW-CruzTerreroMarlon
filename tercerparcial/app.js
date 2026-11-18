@@ -38,6 +38,8 @@ function crearApp(config, pool){
     app.use(
         session({
             name : NOMBRE_COOKIE,
+            // Sin esta línea express-session usa su memoria interna y la tabla sessions nunca se llena.
+            store: almacen,
             //aqui tenemos que definir si es secreta, si es publica o como es su acceso
             secret: process.env.SESSION_SECRET || 'secreto-solo-para-demo',
             resave: false,
