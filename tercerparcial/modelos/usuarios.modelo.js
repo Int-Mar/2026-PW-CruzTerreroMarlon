@@ -16,7 +16,15 @@ function crearModeloUsuarios(pool) {
     );
     const fila = filas[0];
 
-    
+    // Si el usuario no existe igual comparamos contra un hash cualquiera: así "no existe" y
+    // "contraseña mala" tardan lo mismo y dan el mismo mensaje (P-03).
+    const hash = fila ? fila.contrasena_hash : HASH_FALSO;
+    const coincide = await bcrypt.compare(contrasena, hash);
+    if (!fila || !coincide) return null;
+
+    // Nunca regresamos contrasena_hash.
+    const { contrasena_hash, ...sinHash } = fila;
+    return sinHash;
   }
 
   return { verificar };
